@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TwitchTTS Callback</title>
+  <title>Twitch Callback</title>
   <style>
     body {
       margin: 0;
@@ -16,20 +16,33 @@
       text-align: center;
       padding: 24px;
     }
-    a { color: #bb86fc; }
+
+    main {
+      max-width: 520px;
+    }
+
+    a {
+      color: #bb86fc;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
   <main>
-    <h1>Returning to TwitchTTS...</h1>
-    <p>If the app does not open automatically, tap the button below.</p>
-    <p><a id="open-app" href="#">Open TwitchTTS</a></p>
+    <h1>Returning to app...</h1>
+    <p>If the app does not open automatically, tap the link below.</p>
+    <p><a id="open-app" href="#">Open app</a></p>
   </main>
+
   <script>
-    const appRedirectBase = "lv.uzkapajam.twitchtts://auth";
+    const fallbackRedirectBase = "lv.uzkapajam.twitchtts://auth";
     const params = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    const state = params.get("state") || "";
+    const encodedRedirect = state.includes("|") ? state.split("|")[1] : "";
+    const redirectBase = encodedRedirect ? decodeURIComponent(encodedRedirect) : fallbackRedirectBase;
     const query = params.toString();
-    const appUrl = query ? `${appRedirectBase}?${query}` : appRedirectBase;
+    const appUrl = query ? `${redirectBase}?${query}` : redirectBase;
+
     document.getElementById("open-app").href = appUrl;
     window.location.replace(appUrl);
   </script>
